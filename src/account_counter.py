@@ -50,16 +50,21 @@ class AccountCounter():
 			'highest_page_with_response': None
 		}
 
+		result = {
+			'n_accounts':None,
+			'requests_used':None
+		}
+
 		requests_throwed = 0
 
 		while not range_finished:
 			request_page = int((current_max - current_min) / 2) + current_min
 			range_finished = request_page == records['latest_page']
 			
-			if verbose: print(f"range: {current_min}-{current_max} | request page: {request_page} | latest_page: {records['latest_page']} | range_finished: {range_finished} | lp_has_results: {records['latest_page_has_result']}")
+			if verbose: print(f"range: {current_min}-{current_max} | request page: {request_page} | latest_page: {records['latest_page']} | range_finished: {range_finished} | last page_has_results: {records['latest_page_has_result']}")
 			
 			if range_finished:
-				raise Exception(f"Could'n get number of registers after {requests_throwed} requests. Try incrementing self.estimated_max.")
+				raise Exception(f"Could'n get number of registers after {requests_throwed} requests. Try incrementing estimated_max.")
 
 			if simulate:
 				response = self.throw_request(page_size=page_size, page_number=request_page, total=total_accounts)
