@@ -83,18 +83,24 @@ class AccountCounter():
 
 				if records['latest_page'] is not None:
 					if request_page == records['latest_page']-1 and not records['latest_page_has_result']:
-						return int(highest_account)+1, requests_throwed
+						result['n_accounts'] = int(highest_account)+1
+						result['requests_used'] = requests_throwed
+						return result
 
 				if records['lowest_page_without_response'] is not None:
 					if request_page == records['lowest_page_without_response']-1:
-						return int(highest_account)+1, requests_throwed						
+						result['n_accounts'] = int(highest_account)+1
+						result['requests_used'] = requests_throwed
+						return result
 
 				records['latest_page'] = request_page
 				records['latest_page_has_result'] = True
 				records['latest_highest_acc'] = highest_account
 
 				if len(response) < page_size:
-					return int(records['latest_highest_acc'])+1, requests_throwed
+					result['n_accounts'] = int(records['latest_highest_acc'])+1
+					result['requests_used'] = requests_throwed
+					return result
 
 				current_min = request_page
 
@@ -105,15 +111,21 @@ class AccountCounter():
 
 
 				if request_page == 0:
-					return 0, requests_throwed
+					result['n_accounts'] = 0
+					result['requests_used'] = requests_throwed
+					return result
 
 				if records['latest_page'] is not None:
 					if request_page == records['latest_page']+1 and records['latest_page_has_result']:
-						return int(records['latest_highest_acc'])+1, requests_throwed
+						result['n_accounts'] = int(records['latest_highest_acc'])+1
+						result['requests_used'] = requests_throwed
+						return result
 
 				if records['highest_page_with_response'] is not None:
 					if request_page == records['highest_page_with_response']+1:
-						return int(records['latest_highest_acc'])+1, requests_throwed
+						result['n_accounts'] = int(records['latest_highest_acc'])+1
+						result['requests_used'] = requests_throwed
+						return result
 					
 				records['latest_page'] = request_page
 				records['latest_page_has_result'] = False
