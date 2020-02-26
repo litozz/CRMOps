@@ -81,12 +81,6 @@ class AccountCounter:
 
 				highest_account = sorted(response.items(), key=lambda x: x[1])[-1][1]
 
-				# if records['latest_page'] is not None:
-				# 	if request_page == records['latest_page']-1 and not records['latest_page_has_result']:
-				# 		result['n_accounts'] = int(highest_account)+1
-				# 		result['requests_used'] = requests_throwed
-				# 		return result
-
 				if records['lowest_page_without_response'] is not None:
 					if request_page == records['lowest_page_without_response']-1:
 						result['n_accounts'] = int(highest_account)+1
@@ -94,7 +88,6 @@ class AccountCounter:
 						return result
 
 				records['latest_page'] = request_page
-				# records['latest_page_has_result'] = True
 				records['latest_highest_acc'] = highest_account
 
 				if len(response) < page_size:
@@ -114,12 +107,6 @@ class AccountCounter:
 					result['requests_used'] = requests_throwed
 					return result
 
-				# if records['latest_page'] is not None:
-				# 	if request_page == records['latest_page']+1 and records['latest_page_has_result']:
-				# 		result['n_accounts'] = int(records['latest_highest_acc'])+1
-				# 		result['requests_used'] = requests_throwed
-				# 		return result
-
 				if records['highest_page_with_response'] is not None:
 					if request_page == records['highest_page_with_response']+1:
 						result['n_accounts'] = int(records['latest_highest_acc'])+1
@@ -127,7 +114,6 @@ class AccountCounter:
 						return result
 
 				records['latest_page'] = request_page
-				# records['latest_page_has_result'] = False
 				records['latest_highest_acc'] = None
 
 				current_max = request_page
