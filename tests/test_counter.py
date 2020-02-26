@@ -27,7 +27,8 @@ def account_counter(estimated_max):
 def test_account_counter(account_counter,test_input, expected):
 	count = None
 	try:
-		count, _ = account_counter.count_accounts( *test_input )
+		response = account_counter.count_accounts( *test_input )
+		count = response['n_accounts']
 	except ValueError:
 		count = 'value_error'
 	assert count == expected
