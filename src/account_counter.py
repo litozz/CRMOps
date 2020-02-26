@@ -1,7 +1,8 @@
 import requests
 import math
 
-class AccountCounter():
+
+class AccountCounter:
 	def __init__(self, estimated_max):
 		self.estimated_max = estimated_max
 
@@ -14,26 +15,25 @@ class AccountCounter():
 		if last_account == 0:
 			return {}
 
-		first_account = page_size * (page_number)
+		first_account = page_size * page_number
 		
 		if last_account > total:
 			if first_account > total:
 				return {}
 			last_account = total
 
-		return {str(i):i for i in range(first_account, last_account)}
+		return {str(i): i for i in range(first_account, last_account)}
 
 	@staticmethod
 	def throw_real_request(page_size, page_number, total=None):
-		URL = "https://badger-staging-2-pr-2699.herokuapp.com/api/accounts?"
-		PARAMS = {'pageSize': page_size, 'pageNumber': page_number}
+		url = "https://badger-staging-2-pr-2699.herokuapp.com/api/accounts?"
+		params = {'pageSize': page_size, 'pageNumber': page_number}
 		if total is not None:
-			PARAMS['Total']=total
-		r = requests.get(url = URL, params = PARAMS) 
+			params['Total'] = total
+		r = requests.get(url=url, params=params)
 		return r.json()
 
-
-	def count_accounts(self, page_size, verbose=False, simulate=False, total_accounts = None):
+	def count_accounts(self, page_size, verbose=False, simulate=False, total_accounts=None):
 		if page_size <= 0:
 			raise ValueError('Page size cannot be lower than 0')
 
@@ -43,16 +43,16 @@ class AccountCounter():
 		range_finished = False
 
 		records = {	
-			'latest_page' : None,
-			'latest_page_has_result' : None,
-			'latest_highest_acc' : None,
+			'latest_page': None,
+			'latest_page_has_result': None,
+			'latest_highest_acc': None,
 			'lowest_page_without_response': None,
 			'highest_page_with_response': None
 		}
 
 		result = {
-			'n_accounts':None,
-			'requests_used':None
+			'n_accounts': None,
+			'requests_used': None
 		}
 
 		requests_throwed = 0
@@ -61,7 +61,8 @@ class AccountCounter():
 			request_page = int((current_max - current_min) / 2) + current_min
 			range_finished = request_page == records['latest_page']
 			
-			if verbose: print(f"range: {current_min}-{current_max} | request page: {request_page} | latest_page: {records['latest_page']} | range_finished: {range_finished} | last page_has_results: {records['latest_page_has_result']}")
+			if verbose:
+				print(f"range: {current_min}-{current_max} | request page: {request_page} | latest_page: {records['latest_page']} | range_finished: {range_finished}")  # | last page_has_results: {records['latest_page_has_result']}")
 			
 			if range_finished:
 				raise Exception(f"Could'n get number of registers after {requests_throwed} requests. Try incrementing estimated_max.")
