@@ -1,35 +1,39 @@
 import pytest
 import sys
+
 sys.path.append('..')
 from src.account_counter import AccountCounter
+
 
 @pytest.fixture()
 def estimated_max():
     return 999999
 
+
 @pytest.fixture()
 def account_counter(estimated_max):
     return AccountCounter(estimated_max)
 
+
 @pytest.mark.parametrize("test_input", [
-	# (page_size, page_number,total)
-	(0,0,5),
-	(-1,2,5),
-	(1,-2,5),
-	(-1,-2,5),
-	(1,0,5),
-	(1,1,5),
-	(1,2,5),
-	(1,3,5),
-	(1,4,5),
-	(1,5,5),
-	(2,0,5),
-	(2,1,5),
-	(2,2,5),
-	(2,3,5),
-	(3,0,5),
-	(3,1,5),
-	(3,1,0),
+    # (page_size, page_number,total)
+    (0, 0, 5),
+    (-1, 2, 5),
+    (1, -2, 5),
+    (-1, -2, 5),
+    (1, 0, 5),
+    (1, 1, 5),
+    (1, 2, 5),
+    (1, 3, 5),
+    (1, 4, 5),
+    (1, 5, 5),
+    (2, 0, 5),
+    (2, 1, 5),
+    (2, 2, 5),
+    (2, 3, 5),
+    (3, 0, 5),
+    (3, 1, 5),
+    (3, 1, 0),
 ])
 def test_service_simulator(account_counter, test_input):
-	assert account_counter.throw_request( *test_input ) == account_counter.throw_real_request( *test_input )
+	assert account_counter.throw_request(*test_input) == account_counter.throw_real_request(*test_input)
