@@ -22,6 +22,7 @@ def account_counter():
     ((2000, 99999,  False, USE_SIMULATED_SERVICE, 100000), 'runtime_error'),
     ((2000, 100000,  False, USE_SIMULATED_SERVICE, 100000), 'runtime_error'),
     ((2000, 100001,  False, USE_SIMULATED_SERVICE, 100000), 100000),
+    ((2000, 100000,  False, USE_SIMULATED_SERVICE, 38769), 38769),
 ])
 def test_account_counter(account_counter, test_input, expected):
     count = None
