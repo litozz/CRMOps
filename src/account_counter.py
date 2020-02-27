@@ -3,8 +3,8 @@ import math
 
 
 class AccountCounter:
-	def __init__(self, estimated_max):
-		self.estimated_max = estimated_max
+	def __init__(self):
+		pass
 
 	@staticmethod
 	def throw_request(page_size, page_number, total):
@@ -33,19 +33,18 @@ class AccountCounter:
 		r = requests.get(url=url, params=params)
 		return r.json()
 
-	def count_accounts(self, page_size, verbose=False, simulate=False, total_accounts=None):
+	def count_accounts(self, page_size, estimated_max=99999, verbose=False, simulate=False, total_accounts=None):
 		if page_size <= 0:
 			raise ValueError('Page size cannot be lower than 0')
 
 		current_min = 0
-		current_max = math.ceil(self.estimated_max / page_size)
+		current_max = math.ceil(estimated_max / page_size)
 
 		range_finished = False
 
 		records = {	
-			'latest_page': None,
-			'latest_page_has_result': None,
-			'latest_highest_acc': None,
+			'latest_page_visited': None,
+			'highest_acc_with_response': None,
 			'lowest_page_without_response': None,
 			'highest_page_with_response': None
 		}
@@ -59,10 +58,10 @@ class AccountCounter:
 
 		while not range_finished:
 			request_page = int((current_max - current_min) / 2) + current_min
-			range_finished = request_page == records['latest_page']
+			range_finished = request_page == records['latest_page_visited']
 			
 			if verbose:
-				print(f"range: {current_min}-{current_max} | request page: {request_page} | latest_page: {records['latest_page']} | range_finished: {range_finished}")  # | last page_has_results: {records['latest_page_has_result']}")
+				print(f"range: {current_min}-{current_max} | request page: {request_page} | latest_page visited: {records['latest_page_visited']} | range_finished: {range_finished}")  # | last page_has_results: {records['latest_page_has_result']}")
 			
 			if range_finished:
 				raise Exception(f"Could'n get number of registers after {requests_throwed} requests. Try incrementing estimated_max.")
@@ -87,8 +86,8 @@ class AccountCounter:
 						result['requests_used'] = requests_throwed
 						return result
 
-				records['latest_page'] = request_page
-				records['latest_highest_acc'] = highest_account
+				records['latest_page_visited'] = request_page
+				records['highest_acc_with_response'] = highest_account
 
 				if len(response) < page_size:
 					result['n_accounts'] = int(highest_account)+1
@@ -109,11 +108,15 @@ class AccountCounter:
 
 				if records['highest_page_with_response'] is not None:
 					if request_page == records['highest_page_with_response']+1:
-						result['n_accounts'] = int(records['latest_highest_acc'])+1
+						result['n_accounts'] = int(records['highest_acc_with_response'])+1
 						result['requests_used'] = requests_throwed
 						return result
 
-				records['latest_page'] = request_page
-				records['latest_highest_acc'] = None
+				records['latest_page_visited'] = request_page
 
 				current_max = request_page
+
+if __name__ == '__main__':
+	ac = AccountCounter()
+	input_args = (5, 99999,  False, True, 2000)
+	print(ac.count_accounts(*input_args))
