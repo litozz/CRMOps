@@ -64,7 +64,7 @@ class AccountCounter:
 				print(f"range: {current_min}-{current_max} | request page: {request_page} | latest_page visited: {records['latest_page_visited']} | range_finished: {range_finished}")  # | last page_has_results: {records['latest_page_has_result']}")
 			
 			if range_finished:
-				raise Exception(f"Could'n get number of registers after {requests_throwed} requests. Try incrementing estimated_max.")
+				raise RuntimeError(f"Could'n get number of registers after {requests_throwed} requests. Try incrementing estimated_max.")
 
 			if simulate:
 				response = self.throw_request(page_size=page_size, page_number=request_page, total=total_accounts)
