@@ -4,15 +4,9 @@ import sys
 sys.path.append('..')
 from src.account_counter import AccountCounter
 
-
 @pytest.fixture()
-def estimated_max():
-    return 999999
-
-
-@pytest.fixture()
-def account_counter(estimated_max):
-    return AccountCounter(estimated_max)
+def account_counter():
+    return AccountCounter()
 
 
 @pytest.mark.parametrize("test_input", [
