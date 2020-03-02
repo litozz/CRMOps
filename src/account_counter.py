@@ -57,7 +57,7 @@ class AccountCounter:
 		requests_throwed = 0
 
 		while not range_finished:
-			request_page = int((current_max - current_min) / 2) + current_min
+			request_page = int((current_max + current_min) / 2)
 			range_finished = request_page == records['latest_page_visited']
 			
 			if verbose:
